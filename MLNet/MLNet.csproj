@@ -5,4 +5,12 @@
     <UserSecretsId>60407227-70f0-432c-8f90-b983dca98ffe</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Telegram.Bot" Version="15.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MLNetML.Model\MLNetML.Model.csproj" />
+  </ItemGroup>
+
 </Project>
