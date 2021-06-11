@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MLNet.Services.Telegram.Abstractions;
@@ -20,14 +21,17 @@ namespace MLNet.Services.Telegram
         private Timer timer;
         private static TelegramBotClient telegramClient;
         private readonly IOptions<TelegramKey> telegramKey;
+        private readonly IWebHostEnvironment _environment;
         private static List<Command> Commands;
 
         public TelegramService(ILogger<TelegramService> _logger,
-                               IOptions<TelegramKey> _telegramKey)
+                               IOptions<TelegramKey> _telegramKey,
+                               IWebHostEnvironment environment)
         {
             logger = _logger;
             telegramKey = _telegramKey;
             telegramClient = new TelegramBotClient(telegramKey.Value.Key);
+            _environment = environment;
         }
 
 
@@ -62,7 +66,7 @@ namespace MLNet.Services.Telegram
         {
             var message = e.Update.Message;
 
-            if (message.Photo != null)
+            if (message.Type == MessageType.Document || message.Type == MessageType.Photo)
             {
                 message.Text = "Image";
             }
@@ -81,12 +85,12 @@ namespace MLNet.Services.Telegram
             else return;
         }
 
-        private static void CreateCommandList()
+        private void CreateCommandList()
         {
             logger.LogInformation("Telegram: Creating command list");
             Commands = new List<Command>();
             Commands.Add(new StartCommand());
-            Commands.Add(new ImageCommand());
+            Commands.Add(new ImageCommand(_environment));
         }
 
     }
