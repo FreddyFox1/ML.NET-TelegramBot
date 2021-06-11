@@ -5,10 +5,6 @@ VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MLNet", "MLNet\MLNet.csproj", "{044DBC24-8E5D-4570-B15A-9EA479867DC4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MLNetML.Model", "MLNetML.Model\MLNetML.Model.csproj", "{D7A271D4-1860-4184-98A4-B25BE909BA5F}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MLNetML.ConsoleApp", "MLNetML.ConsoleApp\MLNetML.ConsoleApp.csproj", "{7919234D-25FD-4427-9F67-A5CA7A122D59}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,14 +15,6 @@ Global
 		{044DBC24-8E5D-4570-B15A-9EA479867DC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{044DBC24-8E5D-4570-B15A-9EA479867DC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{044DBC24-8E5D-4570-B15A-9EA479867DC4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D7A271D4-1860-4184-98A4-B25BE909BA5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D7A271D4-1860-4184-98A4-B25BE909BA5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D7A271D4-1860-4184-98A4-B25BE909BA5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D7A271D4-1860-4184-98A4-B25BE909BA5F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7919234D-25FD-4427-9F67-A5CA7A122D59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7919234D-25FD-4427-9F67-A5CA7A122D59}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7919234D-25FD-4427-9F67-A5CA7A122D59}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7919234D-25FD-4427-9F67-A5CA7A122D59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

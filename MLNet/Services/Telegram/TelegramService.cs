@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MLNet.Services.Telegram.Abstractions;
+using MLNet.Services.Telegram.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,17 +20,8 @@ namespace MLNet.Services.Telegram
         private Timer timer;
         private static TelegramBotClient telegramClient;
         private readonly IOptions<TelegramKey> telegramKey;
-        //private static List<Command> CommandsList;
+        private static List<Command> Commands;
 
-        //public static IReadOnlyList<Command> Commands
-        //{
-        //    get => CommandsList.AsReadOnly();
-        //}
-
-        /// <summary>
-        /// </summary>
-        /// <param name="_logger">Получаем логгер для логгирования</param>
-        /// <param name="_telegramKey">Token атвторизации для работы бота Telegram</param>
         public TelegramService(ILogger<TelegramService> _logger,
                                IOptions<TelegramKey> _telegramKey)
         {
@@ -38,25 +30,19 @@ namespace MLNet.Services.Telegram
             telegramClient = new TelegramBotClient(telegramKey.Value.Key);
         }
 
-        /// <summary>
-        /// Подписываемся на событие обновления сообщений, 
-        /// и начинаем прослушивать сообщения которые летят к боту
-        /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
+
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            SetCommandList();
+            CreateCommandList();
+            logger.LogInformation("Telegram: Command list was created");
 
-            logger.LogInformation("Telegram service started");
             telegramClient.OnUpdate += OnUpdateReceived;
+
             timer = new Timer(a =>
             {
                 GetUpdates();
             },
-                null,
-                TimeSpan.Zero,
-                TimeSpan.FromSeconds(5));
+            null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
 
             return Task.CompletedTask;
         }
@@ -66,51 +52,41 @@ namespace MLNet.Services.Telegram
             return Task.CompletedTask;
         }
 
-        /// <summary>
-        /// Получение обновлений от Telegram API
-        /// </summary>
         public void GetUpdates()
         {
+            logger.LogInformation("Telegram receiving updates now");
             telegramClient.StartReceiving(Array.Empty<UpdateType>());
         }
 
-        /// <summary>
-        /// Отправка уведомлений
-        /// </summary>
-        public void SendNotification()
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Событие получения обновлений
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private static async void OnUpdateReceived(object sender, UpdateEventArgs e)
         {
             var message = e.Update.Message;
-            if (message == null || message.Type != MessageType.Text) return;
-            else
+
+            if (message.Photo != null)
             {
-                //foreach (var command in Commands)
-                //{
-                //    if (command.Contains(message.Text))
-                //    {
-                //        command.Execute(message, telegramClient);
-                //        break;
-                //    }
-                //}
-                logger.LogInformation(message.Text);
-            };
+                message.Text = "Image";
+            }
+
+            if (message.Text != null)
+            {
+                foreach (var command in Commands)
+                {
+                    if (command.Contains(message.Text))
+                    {
+                        command.Execute(message, telegramClient);
+                        break;
+                    }
+                }
+            }
+            else return;
         }
 
-        /// <summary>
-        /// Создаем и заполняем список команд бота
-        /// </summary>
-        private void SetCommandList()
+        private static void CreateCommandList()
         {
-            //CommandsList = new List<Command>();
+            logger.LogInformation("Telegram: Creating command list");
+            Commands = new List<Command>();
+            Commands.Add(new StartCommand());
+            Commands.Add(new ImageCommand());
         }
 
     }

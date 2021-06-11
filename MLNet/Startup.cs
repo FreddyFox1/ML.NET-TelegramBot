@@ -17,6 +17,11 @@ namespace MLNet
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .AddJsonFile("Telegram.json");
+            
+            Configuration = builder.Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -26,6 +31,7 @@ namespace MLNet
         {
             services.Configure<TelegramKey>(Configuration.GetSection("Telegram"));
             services.AddHostedService<TelegramService>();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,14 +48,12 @@ namespace MLNet
 
             app.UseStaticFiles();
 
-            app.UseRouting();
+            //app.UseRouting();
 
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapRazorPages();
-            });
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapRazorPages();
+            //});
         }
     }
 }
